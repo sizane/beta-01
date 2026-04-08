@@ -16,5 +16,7 @@ public class Main {
 
         layar.setLocationRelativeTo(null);
         layar.setVisible(true);
+
+        gameP01.startGameThread();
     }
 }

@@ -2,6 +2,8 @@ package main01;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
@@ -33,8 +35,30 @@ public class p01 extends JPanel implements Runnable{
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'run'");
+        
+        while (gameThread != null) {
+            System.out.println("the game loop is running");
+
+            // update : for update the information such as character positions
+            update();
+
+            // draw(repaint) : for draw the screen with update information
+            repaint();
+        }
+    }
+    public void update(){
+
+    }
+
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setColor(Color.blue);
+
+        g2.fillRect(100, 100, tileSize, tileSize);
+
+        g2.dispose();
     }
 
 
