@@ -19,13 +19,24 @@ public class p01 extends JPanel implements Runnable{
     final int screenWidth = tileSize * maksScreenCon; // 960 pixel
     final int screenHeight = tileSize * maksScreenRow; // 864 pixel
 
+    //
+    int FPS = 60;
+
+    Keyhand keyH = new Keyhand();
     Thread gameThread;
+
+    // set player default position
+    int playerX = 100;
+    int playerY = 100;
+    int speedP = 4; 
 
     public p01() {
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
+        this.addKeyListener(keyH);
+        this.setFocusable(true);
     }
 
     public void startGameThread(){
@@ -35,19 +46,78 @@ public class p01 extends JPanel implements Runnable{
 
     @Override
     public void run() {
-        
+
+        double drawInters = 1000000000/FPS;
+        double delta = 0;
+        long lastTime = System.nanoTime();
+        long currentTime;
+        long timer = 0;
+        int countFps = 0;
+
         while (gameThread != null) {
-            System.out.println("the game loop is running");
+
+            currentTime = System.nanoTime();
+
+            delta += (currentTime - lastTime)/ drawInters;
+            timer += (currentTime - lastTime);
+            lastTime = currentTime;
+
+            if (delta >= 1){
+                update();
+                repaint();
+                delta --;
+                countFps ++;
+            }
+
+            if (timer >= 1000000000){
+                System.out.println("FPS : " + countFps);
+                countFps = 0;
+                timer = 0;
+            }
+        }   
+    }
+    /*public void run() {
+         
+        double drawInter = 1000000000/FPS;
+        double nextDrawTime = System.nanoTime() + drawInter;
+
+        while (gameThread != null) {
 
             // update : for update the information such as character positions
             update();
 
             // draw(repaint) : for draw the screen with update information
             repaint();
+
+            try {
+                double remainTime = nextDrawTime - System.nanoTime();
+                remainTime = remainTime/1000000;
+                if (remainTime < 0) {
+                    remainTime = 0;
+                }
+
+                Thread.sleep((long) remainTime);
+
+                nextDrawTime += drawInter;
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
+        
     }
+    */
     public void update(){
 
+        if (keyH.upPress == true) {
+            playerY -= speedP;
+        }else if (keyH.downPress == true) {
+            playerY += speedP;
+        }else if (keyH.leftPress == true) {
+            playerX -= speedP;
+        }else if (keyH.rightPress == true) {
+            playerX += speedP;
+        }
     }
 
     public void paintComponent(Graphics g){
@@ -56,9 +126,9 @@ public class p01 extends JPanel implements Runnable{
         Graphics2D g2 = (Graphics2D)g;
         g2.setColor(Color.blue);
 
-        g2.fillRect(100, 100, tileSize, tileSize);
+        g2.fillRect (playerX, playerY, tileSize, tileSize);
 
-        g2.dispose();
+        g2.dispose();   
     }
 
 
