@@ -1,5 +1,6 @@
 package main01;
 
+import player.player1;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -13,7 +14,7 @@ public class p01 extends JPanel implements Runnable{
     final int oriTiSi = 16; // 16x16 pixel
     final int scale = 3; 
 
-    final int tileSize = oriTiSi * scale; // 48x48 pixel
+    public final int tileSize = oriTiSi * scale; // 48x48 pixel
     final int maksScreenCon = 22;
     final int maksScreenRow = 14;
     final int screenWidth = tileSize * maksScreenCon; // 960 pixel
@@ -24,6 +25,7 @@ public class p01 extends JPanel implements Runnable{
 
     Keyhand keyH = new Keyhand();
     Thread gameThread;
+    player1 charPlayer = new player1(this, keyH);
 
     // set player default position
     int playerX = 100;
@@ -108,25 +110,14 @@ public class p01 extends JPanel implements Runnable{
     }
     */
     public void update(){
-
-        if (keyH.upPress == true) {
-            playerY -= speedP;
-        }else if (keyH.downPress == true) {
-            playerY += speedP;
-        }else if (keyH.leftPress == true) {
-            playerX -= speedP;
-        }else if (keyH.rightPress == true) {
-            playerX += speedP;
-        }
+        charPlayer.update();
     }
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D)g;
-        g2.setColor(Color.blue);
-
-        g2.fillRect (playerX, playerY, tileSize, tileSize);
+        charPlayer.draw(g2);        
 
         g2.dispose();   
     }

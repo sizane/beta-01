@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 public class Keyhand implements KeyListener{
 
     public boolean upPress, downPress, leftPress, rightPress;
-
+                
     @Override
     public void keyPressed(KeyEvent e) {
         
